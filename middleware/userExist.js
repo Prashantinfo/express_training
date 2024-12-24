@@ -1,4 +1,6 @@
+const userModel = require('../model/userModel');
 const userExistsMiddleware = async (req, res, next) => {
+
     const { userId } = req.body;
 
     if (!userId) {
