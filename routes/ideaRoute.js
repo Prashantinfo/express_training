@@ -2,26 +2,23 @@ const express = require('express');
 const router = express.Router();
 const Idea = require('../model/ideaModel');
 const userModel = require('../model/userModel');
+const userExistsMiddleware = require('../middleware/userExist');
 
-router.post('/', async (req, res) => {
+router.post('/', userExistsMiddleware, async (req, res) => {
     const { title, description, userId } = req.body;
 
-    if (!title || !description || !userId) {
+    if (!title || !description) {
         return res.status(400).json({ error: 'All fields are required' });
     }
-    if (await userModel.findById(userId)) {
 
-        try {
-            const newIdea = await Idea.create({ title, description, user: userId });
-            res.status(201).json(newIdea);
-        } catch (err) {
-            res.status(400).json({ error: err.message });
-        }
-    }
-    else {
-        res.status(400).json({ error: 'User not found' });
+    try {
+        const newIdea = await Idea.create({ title, description, user: userId });
+        res.status(201).json(newIdea);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
+
 
 
 router.get('/user/:userId', async (req, res) => {
