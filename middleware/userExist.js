@@ -12,7 +12,7 @@ const userExistsMiddleware = async (req, res, next) => {
         if (!user) {
             return res.status(400).json({ error: 'User not found' });
         }
-        // Attach user to the request object for further use if needed
+        
         req.user = user;
         next();
     } catch (err) {
